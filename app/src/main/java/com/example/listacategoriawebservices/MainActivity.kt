@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         cola = Volley.newRequestQueue(this)
 
-        pruebaAddCategoria("verano")
+        //pruebaAddCategoria("verano")
         pruebaGetCategorias()
         pruebaGetUnaCategoria()
-        pruebaDeleteCategoria()
+        //pruebaDeleteCategoria()
         pruebaActualizaUnaCategoria()
 
     }
@@ -84,7 +84,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun pruebaActualizaUnaCategoria() {
-        TODO("Not yet implemented")
+        val url = "https://firestore.googleapis.com/v1/projects/listacategoriaprueba/databases/(default)/documents/categorias/AhbEqtGEGsCtpzImvzyu"
+
+        val categoria = JSONObject()
+        val fields = JSONObject()
+        fields.put("nombre", JSONObject().put("stringValue", "estudiar4"))
+        categoria.put("fields", fields)
+
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.PATCH, url, categoria,
+            Response.Listener { response ->
+                Log.d("Firestore", "Documento actualizado: $response")
+            },
+            Response.ErrorListener { error ->
+                Log.e("Firestore", "Error: $error")
+            })
+
+        cola.add(jsonObjectRequest)
     }
 
     private fun pruebaDeleteCategoria() {
@@ -99,8 +114,8 @@ class MainActivity : AppCompatActivity() {
                     val errorData = String(it.data)
                     Log.e("Firestore", "Error: $errorData")
                 }
-            })
-
+            }
+        )
         cola.add(solicitud)
     }
 
